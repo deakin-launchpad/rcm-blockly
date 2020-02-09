@@ -4,11 +4,18 @@
   <meta charset="utf-8">
   <title>Blockly Demo: Asynchronous Execution with JS Interpreter</title>
   <script src="acorn_interpreter.js"></script>
-  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blockly_uncompressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="wait_block.js"></script>
+  <script src="../../blocks/rcm/test.js"></script>
+  <script src="../../blocks/rcm/versions/1/common.js"></script>
+  <script src="../../blocks/rcm/versions/1/action.js"></script>
+  <script src="../../blocks/rcm/versions/1/condition.js"></script>
+  <script src="../../blocks/rcm/versions/1/scope.js"></script>
+  <script src="../../blocks/rcm/versions/1/requirement.js"></script>
+  <script src="../../blocks/rcm/versions/1/component.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -35,18 +42,24 @@
   <div style="width: 100%">
     <div id="blocklyDiv"
         style="display: inline-block; height: 480px; width: 58%"></div>
+    <!-- Code: -->
+    <textarea id="code-output"
+        style="display: inline-block; height: 480px; width: 38%;">
+    </textarea>
+    </br>
     <textarea id="output" disabled="disabled"
         style="display: inline-block; height: 480px; width: 38%;">
     </textarea>
   </div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+    <!-- <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
+      <block type="wait_seconds"></block>
     </category>
     <category name="Loops" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
@@ -79,11 +92,19 @@
     <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
     </category>
     <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+    </category> -->
+    <category name="RCM" colour="%{BKY_LOGIC_HUE}">
+      <block type="text"></block>
+      <block type="rcm_component"></block>
+      <block type="rcm_action"></block>
+      <block type="rcm_condition"></block>
+      <block type="rcm_scope"></block>
+      <block type="rcm_requirement"></block>
     </category>
   </xml>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
-    <block type="variables_set" id="set_n_initial" inline="true" x="20" y="20">
+    <!-- <block type="variables_set" id="set_n_initial" inline="true" x="20" y="20">
       <field name="VAR">n</field>
       <value name="VALUE">
         <block type="math_number">
@@ -133,7 +154,7 @@
           </statement>
         </block>
       </next>
-    </block>
+    </block> -->
   </xml>
 
   <script>
@@ -147,9 +168,34 @@
     Blockly.JavaScript.addReservedWords('exit');
 
     var outputArea = document.getElementById('output');
+    var codeOutputArea = document.getElementById('code-output');
     var runButton = document.getElementById('runButton');
     var myInterpreter = null;
     var runner;
+
+    function myUpdateFunction(event) {
+      var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+      codeOutputArea.value = code;
+
+      // if (event.type === Blockly.Events.BLOCK_MOVE) {
+      //   console.log('event')
+      //   console.log(event)
+      //   let thisBlock = demoWorkspace.getBlockById(event.blockId)
+      //   console.log('thisBlock')
+      //   console.log(thisBlock)
+      //   let parentBlock = demoWorkspace.getBlockById(event.newParentId)
+      //   if (!parentBlock) return
+      //   if (parentBlock.type === 'rcm_requirement') {
+      //     console.log('parentBlock');
+      //     console.log(parentBlock);
+      //     // if (event.newInputName !== thisBlock.type) {
+      //     //   console.log(event)
+      //     //   console.log('boom shakalaka')
+      //     // }
+      //   }
+      // }
+    }
+    demoWorkspace.addChangeListener(myUpdateFunction);
 
     function initApi(interpreter, scope) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
