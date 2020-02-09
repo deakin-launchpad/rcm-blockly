@@ -13,7 +13,5 @@ Blockly.defineBlocksWithJsonArray([{
 }]);
 
 Blockly.JavaScript['rcm_component'] = function (block) {
-  return "";
-  var code = Blockly.JavaScript.statementToCode(block, 'VALUE1').split(';\n');
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return Blockly.JavaScript.statementToCode(block, 'VALUE1') || "";
 };

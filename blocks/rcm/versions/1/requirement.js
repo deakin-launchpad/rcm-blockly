@@ -50,6 +50,6 @@ Blockly.JavaScript['rcm_requirement'] = function (block) {
   field_value = get_requirement_field_value('rcm_condition_value', block);
   code = appendCode(field_value, code);
 
-  code = "alert('" + code + "');";
+  code = "alert('" + code + "');\n";
   return code;
 };
