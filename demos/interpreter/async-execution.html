@@ -48,9 +48,10 @@
         style="display: inline-block; height: 480px; width: 38%;">
     </textarea>
     </br>
-    <textarea id="output" disabled="disabled"
+    <!-- <textarea id="output" disabled="disabled"
         style="display: inline-block; height: 480px; width: 38%;">
-    </textarea>
+    </textarea> -->
+    <div id="block-stats"></div>
   </div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
@@ -176,9 +177,42 @@
     var myInterpreter = null;
     var runner;
 
+    function blockStats() {
+      const blockTypes = [
+        {
+          type: "rcm_action",
+          name: "Action"
+        },
+        {
+          type: "rcm_condition",
+          name: "Condition"
+        },
+        {
+          type: "rcm_scope",
+          name: "Scope"
+        },
+        {
+          type: "rcm_requirement",
+          name: "Requirement"
+        },
+        {
+          type: "rcm_component",
+          name: "Component"
+        }
+      ]
+      var result = ""
+      blockTypes.forEach(block => {
+        result += `<p>Total ${block.name}s in workspace: ${demoWorkspace.getBlocksByType(block.type, false).length}</p>`
+      })
+
+      document.getElementById('block-stats').innerHTML = result
+    }
+
     function myUpdateFunction(event) {
       var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
       codeOutputArea.value = code;
+
+      blockStats();
 
       // if (event.type === Blockly.Events.BLOCK_MOVE) {
       //   console.log('event')
@@ -201,7 +235,7 @@
     demoWorkspace.addChangeListener(myUpdateFunction);
 
     const componentsArrayCallback = function(workspace) {
-      return getComponents();
+      return getComponents().map(i => Blockly.Xml.blockToDom(i, true));
     };
 
     demoWorkspace.registerToolboxCategoryCallback(

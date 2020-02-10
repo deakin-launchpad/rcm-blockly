@@ -805,8 +805,8 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
     text: "Add to 'My Components'",
     enabled: true,
     callback: () => {
-      var xml = Blockly.Xml.blockToDom(this, true);
-      myApplication.myComponents.push(xml);
+      // var xml = Blockly.Xml.blockToDom(this, true);
+      addComponent(this);
     }
   }
   menuOptions.push(addToToolBox);
