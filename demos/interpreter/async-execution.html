@@ -9,6 +9,7 @@
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="wait_block.js"></script>
+  <script src="my_components.js"></script>
   <script src="../../blocks/rcm/test.js"></script>
   <script src="../../blocks/rcm/versions/1/common.js"></script>
   <script src="../../blocks/rcm/versions/1/action.js"></script>
@@ -100,6 +101,8 @@
       <block type="rcm_condition"></block>
       <block type="rcm_scope"></block>
       <block type="rcm_requirement"></block>
+    </category>
+    <category name="My Components" custom="MY_COMPONENTS" colour="%{BKY_LOGIC_HUE}">
     </category>
   </xml>
 
@@ -196,6 +199,13 @@
       // }
     }
     demoWorkspace.addChangeListener(myUpdateFunction);
+
+    const componentsArrayCallback = function(workspace) {
+      return getComponents();
+    };
+
+    demoWorkspace.registerToolboxCategoryCallback(
+    'MY_COMPONENTS', componentsArrayCallback);
 
     function initApi(interpreter, scope) {
       // Add an API function for the alert() block, generated for "text_print" blocks.

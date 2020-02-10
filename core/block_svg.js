@@ -801,6 +801,16 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
 
   menuOptions.push(Blockly.ContextMenu.blockHelpOption(block));
 
+  var addToToolBox = {
+    text: "Add to 'My Components'",
+    enabled: true,
+    callback: () => {
+      var xml = Blockly.Xml.blockToDom(this, true);
+      myApplication.myComponents.push(xml);
+    }
+  }
+  menuOptions.push(addToToolBox);
+
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu) {
     this.customContextMenu(menuOptions);
