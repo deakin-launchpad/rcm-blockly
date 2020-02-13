@@ -2,7 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly Demo: Asynchronous Execution with JS Interpreter</title>
+  <title>RCM</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="constants.js"></script>
+  <script src="blocks-store.js"></script>
   <script src="acorn_interpreter.js"></script>
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
@@ -23,6 +26,7 @@
   <h1>RCM</h1>
   <p>
     <!-- <button onclick="runCode()" id="runButton">Run JavaScript</button> -->
+    <button onclick="saveWorkspaceInLS()" id="runButton">Save workspace in local storage</button>
   </p>
 
   <div style="width: 100%">
@@ -146,5 +150,12 @@
     </block> -->
   </xml>
   <script src="async-execution.js"></script>
+  <script src="d3-util.js"></script>
+  <script>
+    var svgContainer = d3.select("body").append("svg")
+      .attr("width", 600)
+      .attr("height", 200);
+  </script>
+  <script src="visualisation.js"></script>
 </body>
 </html>

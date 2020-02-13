@@ -23,6 +23,7 @@ Blockly.JavaScript['rcm_action'] = function (block) {
   if (code === "") return [code, Blockly.JavaScript.ORDER_NONE];
 
   code = code.slice(1, code.length - 1);
+  block.value = code;
   code = 'Action: ' + code;
   return [code, Blockly.JavaScript.ORDER_NONE];
 }

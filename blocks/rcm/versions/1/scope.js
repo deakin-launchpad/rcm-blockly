@@ -23,6 +23,7 @@ Blockly.JavaScript['rcm_scope'] = function (block) {
   if (code === "") return [code, Blockly.JavaScript.ORDER_NONE];
 
   code = code.slice(1, code.length - 1);
+  block.value = code;
   code = 'Scope: ' + code;
   return [code, Blockly.JavaScript.ORDER_NONE];
 }

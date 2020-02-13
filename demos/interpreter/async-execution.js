@@ -30,8 +30,8 @@ function blockStats() {
       name: "Scope"
     },
     {
-      type: "rcm_requirement",
-      name: "Requirement"
+      type: CONSTANTS.rcm.requirement.id,
+      name: CONSTANTS.rcm.requirement.name,
     },
     {
       type: "rcm_component",
@@ -40,17 +40,38 @@ function blockStats() {
   ]
   var result = ""
   blockTypes.forEach(block => {
-    let workspaceBlocks = demoWorkspace.getBlocksByType(block.type, false), rCount = 0, rParents = []
-    if (block.type !== 'rcm_requirement') workspaceBlocks.forEach(workspaceBlock => {
-      let parentBlock = workspaceBlock.getParent()
-      if (parentBlock && parentBlock.type === 'rcm_requirement') {
-        rCount++
-        rParents.push(parentBlock)
-      }
-    })
+    let workspaceBlocks = demoWorkspace.getBlocksByType(block.type, false), rParents = []
+
+    STORE[block.type] = {
+      blocks: workspaceBlocks,
+      parents: [],
+      values: []
+    }
+
+    if (block.type !== CONSTANTS.rcm.requirement.id) {
+      workspaceBlocks.forEach(workspaceBlock => {
+        let parentBlock = workspaceBlock.getParent()
+        if (parentBlock && parentBlock.type === CONSTANTS.rcm.requirement.id) {
+          rParents.push(parentBlock)
+          STORE[block.type].parents.push(parentBlock)
+
+          if (!workspaceBlock.value) return
+
+          let temp = STORE[block.type].values.findIndex(v => v && v.value ? v.value === workspaceBlock.value : -1)
+          if (temp === -1)
+            STORE[block.type].values.push({ value: workspaceBlock.value, parents: [parentBlock] })
+          else {
+            // console.log('temp:', temp)
+            // console.log(STORE[block.type].values[temp])
+            STORE[block.type].values[temp].parents.push(parentBlock)
+          }
+        }
+      })
+    }
+
     result += `<p>Total ${block.name}s in workspace: ${workspaceBlocks.length}.`
-    if (block.type !== 'rcm_requirement') {
-      result += ` Child of ${rCount} requirements.`
+    if (block.type !== CONSTANTS.rcm.requirement.id) {
+      result += ` Child of ${rParents.length} requirements.`
       result += `<div class="btn-group">${rParents.map((i, index) => `<button onclick="highlightUnhighlightBlock('${i.id}')">Requirement ${index + 1}</button>`)}</div>`
     }
     result += '</p>'
@@ -177,6 +198,10 @@ function runCode() {
     }, 1);
     return;
   }
+}
+
+function saveWorkspaceInLS() {
+  
 }
 
 // Load the interpreter now, and upon future changes.
