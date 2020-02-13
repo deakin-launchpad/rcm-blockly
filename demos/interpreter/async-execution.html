@@ -27,6 +27,7 @@
       font-size: 140%;
     }
   </style>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
@@ -50,7 +51,7 @@
     </br>
     <div id="block-stats"></div>
     <textarea id="output" disabled="disabled"
-        style="display: inline-block; height: 480px; width: 38%;">
+        style="display: none; height: 480px; width: 38%;">
     </textarea>
   </div>
 
@@ -202,7 +203,20 @@
       ]
       var result = ""
       blockTypes.forEach(block => {
-        result += `<p>Total ${block.name}s in workspace: ${demoWorkspace.getBlocksByType(block.type, false).length}</p>`
+        let workspaceBlocks = demoWorkspace.getBlocksByType(block.type, false), rCount = 0, rParents = []
+        if (block.type !== 'rcm_requirement') workspaceBlocks.forEach(workspaceBlock => {
+          let parentBlock = workspaceBlock.getParent()
+          if (parentBlock && parentBlock.type === 'rcm_requirement') {
+            rCount++
+            rParents.push(parentBlock)
+          }
+        })
+        result += `<p>Total ${block.name}s in workspace: ${workspaceBlocks.length}.`
+        if (block.type !== 'rcm_requirement') {
+          result += ` Child of ${rCount} requirements.`
+          result += `<div class="btn-group">${rParents.map((i, index) => `<button onclick="highlightUnhighlightBlock('${i.id}')">Requirement ${index + 1}</button>`)}</div>`
+        }
+        result += '</p>'
       })
 
       document.getElementById('block-stats').innerHTML = result
@@ -235,7 +249,7 @@
     demoWorkspace.addChangeListener(myUpdateFunction);
 
     const componentsArrayCallback = function(workspace) {
-      return getComponents().map(i => Blockly.Xml.blockToDom(i, true));
+      return getComponents();
     };
 
     demoWorkspace.registerToolboxCategoryCallback(
@@ -286,6 +300,14 @@
       if (clearOutput) {
         outputArea.value = 'Program output:\n=================';
       }
+    }
+
+    function highlightUnhighlightBlock(id) {
+      highlightBlock(id);
+      setTimeout(() => {
+        demoWorkspace.highlightBlock(null);
+        highlightPause = false;
+      }, 400)
     }
 
     function generateCodeAndLoadIntoInterpreter() {
