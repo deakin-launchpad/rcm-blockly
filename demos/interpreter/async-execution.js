@@ -59,33 +59,7 @@ function blockStats() {
   document.getElementById('block-stats').innerHTML = result
 }
 
-function myUpdateFunction(event) {
-  var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
-  codeOutputArea.value = code;
-
-  blockStats();
-
-  // if (event.type === Blockly.Events.BLOCK_MOVE) {
-  //   console.log('event')
-  //   console.log(event)
-  //   let thisBlock = demoWorkspace.getBlockById(event.blockId)
-  //   console.log('thisBlock')
-  //   console.log(thisBlock)
-  //   let parentBlock = demoWorkspace.getBlockById(event.newParentId)
-  //   if (!parentBlock) return
-  //   if (parentBlock.type === 'rcm_requirement') {
-  //     console.log('parentBlock');
-  //     console.log(parentBlock);
-  //     // if (event.newInputName !== thisBlock.type) {
-  //     //   console.log(event)
-  //     //   console.log('boom shakalaka')
-  //     // }
-  //   }
-  // }
-}
-demoWorkspace.addChangeListener(myUpdateFunction);
-
-const componentsArrayCallback = function (workspace) {
+const componentsArrayCallback = function (_workspace) {
   return getComponents();
 };
 
@@ -132,7 +106,7 @@ function highlightBlock(id) {
 function resetStepUi(clearOutput) {
   demoWorkspace.highlightBlock(null);
   highlightPause = false;
-  runButton.disabled = '';
+  if (runButton) runButton.disabled = '';
 
   if (clearOutput) {
     outputArea.value = 'Program output:\n=================';
@@ -144,7 +118,7 @@ function highlightUnhighlightBlock(id) {
   setTimeout(() => {
     demoWorkspace.highlightBlock(null);
     highlightPause = false;
-  }, 400)
+  }, 200);
 }
 
 function generateCodeAndLoadIntoInterpreter() {
@@ -152,6 +126,9 @@ function generateCodeAndLoadIntoInterpreter() {
   // Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
   Blockly.JavaScript.addReservedWords('highlightBlock');
   latestCode = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  codeOutputArea.value = latestCode;
+
+  blockStats();
 
   resetStepUi(true);
 }
