@@ -809,7 +809,8 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
       addComponent(this);
     }
   }
-  menuOptions.push(addToToolBox);
+
+  if (!this.isInFlyout) menuOptions.push(addToToolBox);
 
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu) {
