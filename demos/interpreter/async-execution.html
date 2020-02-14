@@ -12,7 +12,6 @@
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="wait_block.js"></script>
-  <script src="my_components.js"></script>
   <script src="../../blocks/rcm/test.js"></script>
   <script src="../../blocks/rcm/versions/1/common.js"></script>
   <script src="../../blocks/rcm/versions/1/action.js"></script>
@@ -26,8 +25,9 @@
   <h1>RCM</h1>
   <p>
     <!-- <button onclick="runCode()" id="runButton">Run JavaScript</button> -->
-    <button onclick="serializeWorkspace()" id="runButton">Save workspace</button>
-    <button onclick="loadWorkspace()" id="runButton">Load workspace</button>
+    <button onclick="serializeWorkspace()" id="saveButton">Save workspace</button> Last save time: <span id="lastSaveTime">none</span>
+    <br/>
+    <button onclick="loadWorkspace()" id="loadButton">Load workspace</button> Last load time: <span id="lastLoadTime">none</span>
   </p>
 
   <div style="width: 100%">
@@ -150,6 +150,7 @@
       </next>
     </block> -->
   </xml>
+  <script src="my_components.js"></script>
   <script src="async-execution.js"></script>
   <script src="d3-util.js"></script>
   <script>

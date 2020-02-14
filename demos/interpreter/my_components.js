@@ -5,6 +5,12 @@ var myApplication = {
 
 const MY_COMPONENTS_KEY = "myComponents";
 const DEFAULT_WORKSPACE = "defaultWorkspace";
+const LAST_WORKSPACE_SAVE_TIME = "lastWorkspaceSaveTime";
+
+const saveTimeSpan = document.getElementById("lastSaveTime");
+const loadTimeSpan = document.getElementById("lastLoadTime");
+
+saveTimeSpan.innerHTML = localStorage.getItem(LAST_WORKSPACE_SAVE_TIME) || "none";
 
 function firstLoad() {
   myApplication.domTexts = localStorage.getItem(MY_COMPONENTS_KEY).split(',') || []
@@ -29,10 +35,18 @@ function serializeComponent(blockObj) {
   updateLocalStorage(MY_COMPONENTS_KEY, myApplication.domTexts);
 }
 
+function formattedDate() {
+  return new Date(Date.now()).toLocaleString();
+}
+
 function serializeWorkspace() {
   let dom = Blockly.Xml.workspaceToDom(demoWorkspace, false);
   let domText = Blockly.Xml.domToText(dom);
   updateLocalStorage(DEFAULT_WORKSPACE, domText);
+
+  let saveTime = formattedDate();
+  saveTimeSpan.innerHTML = saveTime;
+  updateLocalStorage(LAST_WORKSPACE_SAVE_TIME, saveTime);
 }
 
 function loadWorkspace() {
@@ -40,4 +54,6 @@ function loadWorkspace() {
   let workspaceText = localStorage.getItem(DEFAULT_WORKSPACE);
   let workspaceDom = Blockly.Xml.textToDom(workspaceText);
   Blockly.Xml.domToWorkspace(workspaceDom, demoWorkspace);
+
+  loadTimeSpan.innerHTML = formattedDate();
 }
