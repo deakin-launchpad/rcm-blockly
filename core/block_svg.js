@@ -805,7 +805,7 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
     text: "Add to 'My Components'",
     enabled: true,
     callback: () => {
-      addComponent(this);
+      serializeComponent(this);
     }
   }
 

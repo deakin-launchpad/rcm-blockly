@@ -4,14 +4,15 @@ var myApplication = {
 };
 
 const MY_COMPONENTS_KEY = "myComponents";
+const DEFAULT_WORKSPACE = "defaultWorkspace";
 
 function firstLoad() {
   myApplication.domTexts = localStorage.getItem(MY_COMPONENTS_KEY).split(',') || []
   myApplication.doms = myApplication.domTexts.map(item => Blockly.Xml.textToDom(item));
 }
 
-function updateLocalStorage() {
-  localStorage.setItem(MY_COMPONENTS_KEY, myApplication.domTexts);
+function updateLocalStorage(key, value) {
+  localStorage.setItem(key, value);
 }
 
 function getComponents() {
@@ -20,10 +21,23 @@ function getComponents() {
   return myApplication.doms;
 }
 
-function addComponent(blockObj) {
+function serializeComponent(blockObj) {
   let dom = Blockly.Xml.blockToDom(blockObj, true);
   myApplication.doms.push(dom);
   let domText = Blockly.Xml.domToText(dom);
   myApplication.domTexts.push(domText);
-  updateLocalStorage();
+  updateLocalStorage(MY_COMPONENTS_KEY, myApplication.domTexts);
+}
+
+function serializeWorkspace() {
+  let dom = Blockly.Xml.workspaceToDom(demoWorkspace, false);
+  let domText = Blockly.Xml.domToText(dom);
+  updateLocalStorage(DEFAULT_WORKSPACE, domText);
+}
+
+function loadWorkspace() {
+  demoWorkspace.clear();
+  let workspaceText = localStorage.getItem(DEFAULT_WORKSPACE);
+  let workspaceDom = Blockly.Xml.textToDom(workspaceText);
+  Blockly.Xml.domToWorkspace(workspaceDom, demoWorkspace);
 }
