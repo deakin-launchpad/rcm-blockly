@@ -200,10 +200,6 @@ function runCode() {
   }
 }
 
-function saveWorkspaceInLS() {
-  
-}
-
 // Load the interpreter now, and upon future changes.
 generateCodeAndLoadIntoInterpreter();
 demoWorkspace.addChangeListener(function (event) {
