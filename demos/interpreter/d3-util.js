@@ -6,3 +6,7 @@ function createCircle(cx, cy, r, fill) {
     .attr("r", r)
     .style("fill", fill);
 }
+
+function clearCanvas() {
+  d3.selectAll("#svg-container > svg > *").remove();
+}

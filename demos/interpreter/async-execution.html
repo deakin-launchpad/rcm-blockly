@@ -43,6 +43,8 @@
         style="display: none; height: 480px; width: 38%;">
     </textarea>
   </div>
+  <h2>Visualisations</h2>
+  <div id="svg-container"></div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <!-- <category name="Logic" colour="%{BKY_LOGIC_HUE}">
@@ -151,13 +153,13 @@
     </block> -->
   </xml>
   <script src="my_components.js"></script>
-  <script src="async-execution.js"></script>
   <script src="d3-util.js"></script>
   <script>
-    var svgContainer = d3.select("body").append("svg")
+    var svgContainer = d3.select("#svg-container").append("svg")
       .attr("width", 600)
       .attr("height", 200);
   </script>
   <script src="visualisation.js"></script>
+  <script src="async-execution.js"></script>
 </body>
 </html>

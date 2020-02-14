@@ -15,29 +15,32 @@ var runButton = document.getElementById('runButton');
 var myInterpreter = null;
 var runner;
 
+const blockTypes = [
+  {
+    type: "rcm_action",
+    name: "Action"
+  },
+  {
+    type: "rcm_condition",
+    name: "Condition"
+  },
+  {
+    type: "rcm_scope",
+    name: "Scope"
+  },
+  {
+    type: CONSTANTS.rcm.requirement.id,
+    name: CONSTANTS.rcm.requirement.name,
+  },
+  {
+    type: "rcm_component",
+    name: "Component"
+  }
+]
 function blockStats() {
-  const blockTypes = [
-    {
-      type: "rcm_action",
-      name: "Action"
-    },
-    {
-      type: "rcm_condition",
-      name: "Condition"
-    },
-    {
-      type: "rcm_scope",
-      name: "Scope"
-    },
-    {
-      type: CONSTANTS.rcm.requirement.id,
-      name: CONSTANTS.rcm.requirement.name,
-    },
-    {
-      type: "rcm_component",
-      name: "Component"
-    }
-  ]
+  console.log('blockstats called')
+  STORE = {}
+
   var result = ""
   blockTypes.forEach(block => {
     let workspaceBlocks = demoWorkspace.getBlocksByType(block.type, false), rParents = []
@@ -50,21 +53,19 @@ function blockStats() {
 
     if (block.type !== CONSTANTS.rcm.requirement.id) {
       workspaceBlocks.forEach(workspaceBlock => {
+        if (!workspaceBlock.value) return
+
+        let temp = STORE[block.type].values.findIndex(v => v && v.value ? v.value === workspaceBlock.value : -1)
+        if (temp === -1) {
+          STORE[block.type].values.push({ value: workspaceBlock.value, parents: [] })
+          temp = 0
+        }
+
         let parentBlock = workspaceBlock.getParent()
         if (parentBlock && parentBlock.type === CONSTANTS.rcm.requirement.id) {
           rParents.push(parentBlock)
           STORE[block.type].parents.push(parentBlock)
-
-          if (!workspaceBlock.value) return
-
-          let temp = STORE[block.type].values.findIndex(v => v && v.value ? v.value === workspaceBlock.value : -1)
-          if (temp === -1)
-            STORE[block.type].values.push({ value: workspaceBlock.value, parents: [parentBlock] })
-          else {
-            // console.log('temp:', temp)
-            // console.log(STORE[block.type].values[temp])
-            STORE[block.type].values[temp].parents.push(parentBlock)
-          }
+          STORE[block.type].values[temp].parents.push(parentBlock)
         }
       })
     }
@@ -207,5 +208,6 @@ demoWorkspace.addChangeListener(function (event) {
     // Something changed. Parser needs to be reloaded.
     resetInterpreter();
     generateCodeAndLoadIntoInterpreter();
+    updateVisualisations();
   }
 });
