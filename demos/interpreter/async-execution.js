@@ -37,11 +37,10 @@ const blockTypes = [
     name: "Component"
   }
 ]
-function blockStats() {
-  console.log('blockstats called')
-  STORE = {}
 
-  var result = ""
+function resultGenerationMethod1() {
+  let result = "";
+
   blockTypes.forEach(block => {
     let workspaceBlocks = demoWorkspace.getBlocksByType(block.type, false), rParents = []
 
@@ -77,8 +76,40 @@ function blockStats() {
     }
     result += '</p>'
   })
+  return result;
+}
 
-  document.getElementById('block-stats').innerHTML = result
+function resultGenerationMethod2() {
+  STORE = []
+
+  let result = "";
+
+  blockTypes.forEach(block => {
+    let workspaceBlocks = demoWorkspace.getBlocksByType(block.type, false), rParents = [];
+    workspaceBlocks.forEach(workspaceBlock => {
+      let parentBlock = workspaceBlock.getParent()
+      if (parentBlock && parentBlock.type === CONSTANTS.rcm.requirement.id) {
+        rParents.push(parentBlock)
+      }
+
+      STORE.push({ child: workspaceBlock, parent: parentBlock })
+    })
+
+    result += `<p>Total ${block.name}s in workspace: ${workspaceBlocks.length}.`
+    if (block.type !== CONSTANTS.rcm.requirement.id) {
+      result += ` Child of ${rParents.length} requirements.`
+      result += `<div class="btn-group">${rParents.map((i, index) => `<button onclick="highlightUnhighlightBlock('${i.id}')">Requirement ${index + 1}</button>`)}</div>`
+    }
+    result += '</p>'
+  })
+  return result;
+}
+
+function blockStats() {
+  console.log('blockstats called')
+  STORE = {}
+
+  document.getElementById('block-stats').innerHTML = resultGenerationMethod2();
 }
 
 const componentsArrayCallback = function (_workspace) {
