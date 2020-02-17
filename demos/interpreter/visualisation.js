@@ -47,13 +47,20 @@ function blockText(block) {
   }
 }
 
+function generateOnClickString(block) {
+  return block.logicalDuplicates.length === 1 ?
+    `highlightUnhighlightBlock("${block.logicalDuplicates}")` :
+    `highlightUnhighlightMultipleBlocks(["${block.logicalDuplicates.join("\", \"")}"])`
+}
+
 function createComponentCircle(vizID, radius, block) {
   block.viz_id = createCircle(
     vizID,
     ...block.pos,
     radius,
     CONSTANTS.rcm[block.type.slice(block.type.indexOf('_') + 1)].rgb,
-    blockText(block)
+    blockText(block),
+    generateOnClickString(block)
   );
 
   return block;
@@ -96,6 +103,11 @@ function canvasGenerationMethod2() {
         // Set childPos to that of the child at foundIndex
         childPos = drawn[pair.child.type][foundIndex].pos;
         drawn[pair.child.type][foundIndex].logicalDuplicates.push(pair.child.id)
+        // Update existing viz
+        document
+          .getElementById(drawn[pair.child.type][foundIndex].viz_id)
+          .setAttribute("onclick", generateOnClickString(drawn[pair.child.type][foundIndex]))
+
       } else {
         idCount++;
         isNew = true;
@@ -145,6 +157,10 @@ function canvasGenerationMethod2() {
           // Set parentPos to that of the parent at foundIndex
           parentPos = drawn[pair.parent.type][foundIndex].pos;
           drawn[pair.parent.type][foundIndex].logicalDuplicates.push(pair.parent.id)
+          // Update existing viz
+          document
+            .getElementById(drawn[pair.parent.type][foundIndex].viz_id)
+            .setAttribute("onclick", generateOnClickString(drawn[pair.child.type][foundIndex]))
         } else {
           idCount++;
           isNew = true;

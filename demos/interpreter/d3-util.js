@@ -1,8 +1,9 @@
-function createCircle(id, cx, cy, r, fill, text) {
+function createCircle(id, cx, cy, r, fill, text, onClick) {
   id = "viz_" + id
   let group = svgContainer
     .append("g")
     .attr("id", id)
+    .attr("onclick", onClick)
 
   group.append("circle")
     .attr("cx", cx)

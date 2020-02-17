@@ -151,8 +151,8 @@ function initApi(interpreter, scope) {
 var highlightPause = false;
 var latestCode = '';
 
-function highlightBlock(id) {
-  demoWorkspace.highlightBlock(id);
+function highlightBlock(id, state) {
+  demoWorkspace.highlightBlock(id, state);
   highlightPause = true;
 }
 
@@ -166,12 +166,16 @@ function resetStepUi(clearOutput) {
   }
 }
 
-function highlightUnhighlightBlock(id) {
-  highlightBlock(id);
+function highlightUnhighlightBlock(id, state) {
+  highlightBlock(id, state);
   setTimeout(() => {
     demoWorkspace.highlightBlock(null);
     highlightPause = false;
   }, 200);
+}
+
+function highlightUnhighlightMultipleBlocks(arr) {
+  arr.forEach(id => highlightUnhighlightBlock(id, true));
 }
 
 function generateCodeAndLoadIntoInterpreter() {
