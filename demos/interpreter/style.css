@@ -25,3 +25,11 @@ h1 {
 .btn-group button:hover {
   background-color: #3e8e41;
 }
+
+.basic-div {
+  display: inline-block; height: 480px; width: 100%
+}
+
+#svg-container {
+  width: 100%
+}

@@ -31,20 +31,17 @@
   </p>
 
   <div style="width: 100%">
-    <div id="blocklyDiv"
-        style="display: inline-block; height: 480px; width: 58%"></div>
-    <!-- Code: -->
-    <textarea id="code-output"
-        style="display: inline-block; height: 480px; width: 38%;">
-    </textarea>
+    <div id="blocklyDiv" class="basic-div"></div>
     </br>
-    <div id="block-stats"></div>
-    <textarea id="output" disabled="disabled"
-        style="display: none; height: 480px; width: 38%;">
-    </textarea>
+    <h2>Visualisation</h2>
+    <div id="svg-container" class="basic-div"></div>
+    <h2>Stats</h2>
+    <div id="block-stats" class="basic-div"></div>
+    <h2>Code</h2>
+    <textarea id="code-output" class="basic-div"></textarea>
+    <h2>Program output</h2>
+    <textarea id="output" class="basic-div" disabled="disabled"></textarea>
   </div>
-  <h2>Visualisations</h2>
-  <div id="svg-container"></div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <!-- <category name="Logic" colour="%{BKY_LOGIC_HUE}">
