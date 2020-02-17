@@ -2,10 +2,6 @@ body {
   background-color: #fff;
   font-family: sans-serif;
 }
-h1 {
-  font-weight: normal;
-  font-size: 140%;
-}
 
 .btn-group button {
   background-color: black; /* Black background */
@@ -27,7 +23,8 @@ h1 {
 }
 
 .basic-div {
-  display: inline-block; height: 480px; width: 100%
+  display: inline-block; height: 480px; width: 100%;
+  border: 1px solid black;
 }
 
 #svg-container {
