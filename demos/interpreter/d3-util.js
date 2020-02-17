@@ -1,19 +1,24 @@
-function createCircle(cx, cy, r, fill, text) {
-  svgContainer
-    .append("circle")
+function createCircle(id, cx, cy, r, fill, text) {
+  id = "viz_" + id
+  let group = svgContainer
+    .append("g")
+    .attr("id", id)
+
+  group.append("circle")
     .attr("cx", cx)
     .attr("cy", cy)
     .attr("r", r)
     .style("fill", fill)
 
-  svgContainer
-    .append("text")
+  group.append("text")
     .attr("x", cx - r)
     .attr("y", cy + r + 15)
     .attr("font-family", "sans-serif")
     // .attr("font-size", "20px")
     // .attr("fill", "red")
     .text(text || "null");
+
+  return id;
 }
 
 function drawLine(x1, y1, x2, y2) {
