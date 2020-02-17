@@ -140,10 +140,9 @@ function canvasGenerationMethod2() {
       }
     }
 
-    if (isNew) {
-      // TODO: connect child and parent
-      console.log(`isNew is true for i = ${i}`)
-      drawLine(...childPos, ...parentPos)
+    if (isNew && childPos.length === 2 && parentPos.length === 2) {
+      // connect child and parent
+      drawLine(...parentPos, ...childPos);
     }
 
   })
